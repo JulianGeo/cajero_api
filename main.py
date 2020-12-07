@@ -1,44 +1,14 @@
-""" Esto es código que se hizo para verificar si los db y modelos sirven
-def main():
-
-    print("db:\n")
-    print(user_db.database_users)
-    print("camilo24:\n")
-    print(user_db.get_user("camilo24"))
-
-if __name__ == "__main__":
-    main()
-
-@app.get("/")
-async def read_root():
-    return {"message": "Hello FastAPI"}
-
-
-@app.get("/users")
-async def users():
-    return {"message": "Hello users"}
-"""
-
-#Código profes
-
-from db.user_db import UserInDB, update_user, get_user
-from db.transaction_db import TransactionInDB, save_transaction
-
+from db.user_db import UserInDB
+from db.user_db import update_user, get_user
+from db.transaction_db import TransactionInDB
+from db.transaction_db import save_transaction
 from models.user_models import UserIn, UserOut
 from models.transaction_models import TransactionIn, TransactionOut
-
 import datetime
 from fastapi import FastAPI, HTTPException
 
-#Con esta línea se crea una apiRest, http exception se usa para lanzar los errores
 api = FastAPI()
 
-#Modificaciones S11
-@api.get("/") 
-async def home(): 
-    return {"message": "Bienvenido a su cajero de confianza"}
-
-#Función API para autenticar usuario, funcionalidad de la RESTAPI
 @api.post("/user/auth/")
 async def auth_user(user_in: UserIn):
 
@@ -52,7 +22,7 @@ async def auth_user(user_in: UserIn):
 
     return  {"Autenticado": True}
 
-#Siempre que es get lo que está en la url {} , debe estar como parámetro en la función {username}=(username)
+
 @api.get("/user/balance/{username}")
 async def get_balance(username: str):
 
@@ -80,11 +50,9 @@ async def make_transaction(transaction_in: TransactionIn):
     user_in_db.balance = user_in_db.balance - transaction_in.value
     update_user(user_in_db)
 
-    # ** es para mapear
     transaction_in_db = TransactionInDB(**transaction_in.dict(), actual_balance = user_in_db.balance)
     transaction_in_db = save_transaction(transaction_in_db)
 
     transaction_out = TransactionOut(**transaction_in_db.dict())
 
     return  transaction_out
- 

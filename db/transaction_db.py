@@ -2,13 +2,11 @@ from datetime import datetime
 from pydantic import BaseModel
 
 class TransactionInDB(BaseModel):
-    id_transaction: int = 0 #valor por defecto es 0
+    id_transaction: int = 0
     username: str
-    #Setea fecha con la que está actualmente en el sistema
     date: datetime = datetime.now()
     value: int
     actual_balance: int
-
 
 database_transactions = []
 generator = {"id":0}
