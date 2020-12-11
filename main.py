@@ -9,6 +9,22 @@ from fastapi import FastAPI, HTTPException
 
 api = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://localhost:8081",
+    "https://cajero-app-front.herokuapp.com/user/camilo24"
+]
+
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"],
+)
+
+
+
 @api.post("/user/auth/")
 async def auth_user(user_in: UserIn):
 
